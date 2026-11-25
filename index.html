@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gira y Gana | Chocolatería</title>
+  <title>CHOCO_RULETA | EL MACHULA</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
     :root {
@@ -118,7 +118,7 @@
     input {
       width: 100%;
       padding: 12px 14px;
-      margin: 8px 0;
+      margin: 7px 0;
       border-radius: 10px;
       border: 1px solid #3a3a3a;
       background: #262626;
@@ -131,10 +131,34 @@
       border-color: var(--gold);
     }
 
+    .follow-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0 6px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #242424;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      text-align: left;
+      font-size: 0.88rem;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .follow-check input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: var(--gold);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
     .btn-gold {
       width: 100%;
       padding: 13px;
-      margin-top: 12px;
+      margin-top: 10px;
       border: none;
       border-radius: 10px;
       background: linear-gradient(135deg, var(--gold), var(--gold-soft));
@@ -152,9 +176,9 @@
 
     .wheel-wrap {
       position: relative;
-      width: 280px;
-      height: 280px;
-      margin: 18px auto;
+      width: 265px;
+      height: 265px;
+      margin: 14px auto;
     }
 
     .pointer {
@@ -175,7 +199,8 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      transition: transform 4.5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+      display: block;
+      transform-origin: center center;
     }
 
     .coupon-box {
@@ -198,13 +223,39 @@
     }
 
     .wa-btn {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       padding: 12px;
       border-radius: 10px;
       background: #25d366;
       color: #0e1b12;
       font-weight: 800;
       text-decoration: none;
+    }
+
+    .wa-btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 10px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid rgba(37, 211, 102, 0.65);
+      color: #8bf0b0;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .note-wa {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.35;
     }
   </style>
 </head>
@@ -216,49 +267,55 @@
     <h1>CHOCO_RULETA</h1>
     <p class="sub">Gana descuentos y premios en tu compra</p>
 
-    <!-- Paso 1 -->
+    <!-- Paso 1: Elegir red social y pasar directo a la ruleta + datos -->
     <div id="step1" class="step active">
-      <p><strong>Paso 1:</strong> Síguenos en una de nuestras redes para desbloquear el juego.</p>
-      <a class="social-btn tiktok" href="https://www.tiktok.com/@tu_cuenta" target="_blank" onclick="registrarClick('TikTok')">
+      <p><strong>Paso 1:</strong> Síguenos en una red y pasa directo a la ruleta:</p>
+      <a class="social-btn tiktok" href="https://www.tiktok.com/@el_machula" target="_blank" rel="noopener" onclick="irDirectoARuleta('TikTok')">
         <i class="bi bi-tiktok"></i>
         <span>Seguir en TikTok</span>
       </a>
-      <a class="social-btn instagram" href="https://www.instagram.com/tu_cuenta" target="_blank" onclick="registrarClick('Instagram')">
+      <a class="social-btn instagram" href="https://www.instagram.com/el_machula_chocolateria?hvrq=d3hkcGNhbDhsZzh2" target="_blank" rel="noopener" onclick="irDirectoARuleta('Instagram')">
         <i class="bi bi-instagram"></i>
         <span>Seguir en Instagram</span>
       </a>
-      <a class="social-btn facebook" href="https://www.facebook.com/tu_cuenta" target="_blank" onclick="registrarClick('Facebook')">
+      <a class="social-btn facebook" href="https://www.facebook.com/share/1Ssy5TgKup/" target="_blank" rel="noopener" onclick="irDirectoARuleta('Facebook')">
         <i class="bi bi-facebook"></i>
         <span>Seguir en Facebook</span>
       </a>
-      <button id="btnPaso1" class="btn-gold" disabled onclick="irPaso(2)">
-        <i class="bi bi-unlock-fill"></i> Ya los sigo, continuar
-      </button>
     </div>
 
-    <!-- Paso 2 -->
+    <!-- Paso 2: Datos + Confirmación ("Ya te sigo para poder jugar") + Ruleta -->
     <div id="step2" class="step">
-      <p><strong>Paso 2:</strong> Déjanos tus datos para guardar tu cupón.</p>
-      <input type="text" id="nombre" placeholder="Tu nombre completo">
-      <input type="tel" id="whatsapp" placeholder="Tu WhatsApp (ej. 984123456)">
-      <button class="btn-gold" onclick="irPaso(3)">Continuar a la ruleta</button>
-    </div>
+      <p><strong>Paso 2:</strong> Completa tus datos y gira la ruleta:</p>
+      <input type="text" id="nombre" placeholder="Tu nombre completo" autocomplete="name">
+      <input type="tel" id="whatsapp" placeholder="Tu celular (9 dígitos, ej. 984123456)" inputmode="numeric" maxlength="9" autocomplete="tel">
 
-    <!-- Paso 3 -->
-    <div id="step3" class="step">
-      <p><strong>Paso 3:</strong> ¡Toca el botón y gira!</p>
+      <label class="follow-check" for="checkYaSigo">
+        <input type="checkbox" id="checkYaSigo" onchange="actualizarEstadoGiro()">
+        <span><strong>Ya te sigo</strong> para poder jugar</span>
+      </label>
+
       <div class="wheel-wrap">
         <div class="pointer"></div>
         <canvas id="ruleta" width="300" height="300"></canvas>
       </div>
-      <button id="btnGirar" class="btn-gold" onclick="girar()">¡GIRAR RULETA!</button>
+
+      <button type="button" id="btnGirar" class="btn-gold" onclick="girar()" disabled>¡GIRAR RULETA!</button>
 
       <div id="resultado" class="coupon-box" style="display: none;">
         <div id="tituloPremio" style="font-size: 1.15rem; font-weight: 800; color: var(--gold);"></div>
         <div id="codigoPremio" class="coupon-code"></div>
-        <a id="btnWhatsapp" class="wa-btn" href="#" target="_blank">
-          Enviar mi cupón por WhatsApp
+        <a id="btnWhatsappCliente" class="wa-btn" href="#" target="_blank" rel="noopener">
+          <i class="bi bi-whatsapp"></i>
+          <span>Abrir WhatsApp con mi cupón</span>
         </a>
+        <a id="btnWhatsappNegocio" class="wa-btn-secondary" href="#" target="_blank" rel="noopener">
+          <i class="bi bi-send-check"></i>
+          <span>Canjear con EL MACHULA</span>
+        </a>
+        <div class="note-wa">
+          Al tocar el botón se abre WhatsApp con tu cupón listo; solo presiona <strong>Enviar</strong> para que quede guardado en tu chat.
+        </div>
       </div>
     </div>
   </div>
@@ -266,21 +323,31 @@
   <script>
     const opciones = [
       '10% de Descuento',
-      'Trufa / Bombon',
+      'Bombon',
       '15% de Descuento',
       '2x1 en Barra',
       'Envio Gratis',
       'Pack Degustacion'
     ];
+    const pesos = [40, 25, 15, 10, 8, 2];
     const colores = ['#2a160f', '#b8860b', '#3b1f15', '#8c6200', '#2a160f', '#5c3120'];
 
-    let redElegida = '';
-    let girando = false;
+    // false = cada número de celular solo puede jugar y ganar una vez
+    const MODO_PRUEBAS = false;
 
-    // Genera hojas y granos de cacao SVG cayendo en el fondo
+    // Cambia a true solo cuando estés en un servidor con girar.php y base de datos activa
+    const USAR_BACKEND_PHP = false;
+
+    const STORAGE_KEY_BORRADOR = 'choco_ruleta_borrador_v1';
+    const STORAGE_KEY_RED = 'choco_ruleta_red_v1';
+
+    let redElegida = localStorage.getItem(STORAGE_KEY_RED) || '';
+    let girando = false;
+    let anguloActual = 0;
+
     function iniciarFondoCacao() {
       const contenedor = document.getElementById('cacao-bg');
-      const cantidad = 18; // Ajusta entre 12 y 24 según qué tan cargado quieras el fondo
+      const cantidad = 18;
 
       const svgHoja = `
         <svg viewBox="0 0 40 56" width="100%" height="100%">
@@ -305,8 +372,8 @@
 
         const size = esHoja ? (24 + Math.random() * 14) : (18 + Math.random() * 10);
         const left = Math.random() * 100;
-        const duration = 9 + Math.random() * 8; // 9s a 17s
-        const delay = -(Math.random() * duration); // Empiezan ya repartidos en pantalla
+        const duration = 9 + Math.random() * 8;
+        const delay = -(Math.random() * duration);
         const deriva = (Math.random() > 0.5 ? 1 : -1) * (18 + Math.random() * 28) + 'px';
 
         el.style.width = `${size}px`;
@@ -320,33 +387,62 @@
       }
     }
 
-    function registrarClick(red) {
-      redElegida = red;
-      setTimeout(() => {
-        document.getElementById('btnPaso1').disabled = false;
-      }, 1500);
+    function obtenerCelularNueveDigitos() {
+      const inputWa = document.getElementById('whatsapp');
+      const limpio = inputWa.value.replace(/[^0-9]/g, '').slice(0, 9);
+      if (inputWa.value !== limpio) {
+        inputWa.value = limpio;
+      }
+      return limpio;
     }
 
-    function irPaso(paso) {
-      if (paso === 3) {
-        const nombre = document.getElementById('nombre').value.trim();
-        const whatsapp = document.getElementById('whatsapp').value.replace(/[^0-9]/g, '');
-        if (nombre.length < 2 || whatsapp.length < 9) {
-          alert('Por favor escribe tu nombre y un número de WhatsApp válido.');
-          return;
-        }
-      }
+    function guardarBorrador() {
+      const nombre = document.getElementById('nombre').value;
+      const whatsapp = obtenerCelularNueveDigitos();
+      localStorage.setItem(STORAGE_KEY_BORRADOR, JSON.stringify({ nombre, whatsapp }));
+    }
 
+    function restaurarBorrador() {
+      const raw = localStorage.getItem(STORAGE_KEY_BORRADOR);
+      if (!raw) return;
+
+      try {
+        const datos = JSON.parse(raw);
+        const inputNombre = document.getElementById('nombre');
+        const inputWhatsapp = document.getElementById('whatsapp');
+
+        if (datos.nombre) inputNombre.value = datos.nombre;
+        if (datos.whatsapp) inputWhatsapp.value = String(datos.whatsapp).replace(/[^0-9]/g, '').slice(0, 9);
+      } catch (e) {}
+    }
+
+    function actualizarEstadoGiro() {
+      const marcado = document.getElementById('checkYaSigo').checked;
+      document.getElementById('btnGirar').disabled = !marcado || girando;
+    }
+
+    function normalizarTelefonoPeru(telefonoRaw) {
+      const limpio = (telefonoRaw || '').replace(/[^0-9]/g, '').slice(0, 9);
+      return limpio.length === 9 ? '51' + limpio : limpio;
+    }
+
+    function mostrarVistaRuleta() {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-      document.getElementById('step' + paso).classList.add('active');
+      document.getElementById('step2').classList.add('active');
+      dibujarRuleta();
+      actualizarEstadoGiro();
+    }
 
-      if (paso === 3) {
-        dibujarRuleta();
-      }
+    function irDirectoARuleta(red) {
+      redElegida = red;
+      localStorage.setItem(STORAGE_KEY_RED, red);
+      document.getElementById('checkYaSigo').checked = true;
+      mostrarVistaRuleta();
     }
 
     function dibujarRuleta() {
       const canvas = document.getElementById('ruleta');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const total = opciones.length;
       const anguloPorPorcion = (2 * Math.PI) / total;
@@ -378,73 +474,186 @@
       }
     }
 
+    function elegirIndiceAleatorio() {
+      let r;
+      if (window.crypto && window.crypto.getRandomValues) {
+        const arr = new Uint32Array(1);
+        window.crypto.getRandomValues(arr);
+        r = (arr[0] % 100) + 1;
+      } else {
+        r = Math.floor(Math.random() * 100) + 1;
+      }
+
+      let acumulado = 0;
+      for (let i = 0; i < pesos.length; i++) {
+        acumulado += pesos[i];
+        if (r <= acumulado) {
+          return i;
+        }
+      }
+      return 0;
+    }
+
+    function sortearLocal(whatsapp) {
+      const claveHistorial = 'choco_ruleta_ganado_' + whatsapp;
+
+      if (!MODO_PRUEBAS) {
+        const previo = localStorage.getItem(claveHistorial);
+        if (previo) {
+          const guardado = JSON.parse(previo);
+          return {
+            status: 'ya_participo',
+            indice: guardado.indice ?? 0,
+            premio: guardado.premio,
+            codigo: guardado.codigo
+          };
+        }
+      }
+
+      const indice = elegirIndiceAleatorio();
+      const premio = opciones[indice];
+      const codigo = 'CHOCO-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+
+      if (!MODO_PRUEBAS) {
+        localStorage.setItem(claveHistorial, JSON.stringify({ indice, premio, codigo }));
+      }
+
+      return { status: 'ok', indice, premio, codigo };
+    }
+
+    function animarGiroSuave(indiceGanador, alTerminar) {
+      const canvas = document.getElementById('ruleta');
+      const gradosPorSector = 360 / opciones.length;
+      const centroSector = indiceGanador * gradosPorSector + gradosPorSector / 2;
+
+      const anguloObjetivoMod = (360 - (centroSector % 360) + 360) % 360;
+      const inicioDeg = anguloActual;
+      const deltaMod = (anguloObjetivoMod - (inicioDeg % 360) + 360) % 360;
+      const totalGiroDeg = 360 * 7 + deltaMod;
+      const destinoDeg = inicioDeg + totalGiroDeg;
+
+      const duracionMs = 4000;
+      const tiempoInicio = performance.now();
+
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      function pasoAnimacion(ahora) {
+        const transcurrido = ahora - tiempoInicio;
+        const progreso = Math.min(transcurrido / duracionMs, 1);
+        const actualDeg = inicioDeg + totalGiroDeg * easeOutCubic(progreso);
+
+        canvas.style.transform = `rotate(${actualDeg}deg)`;
+
+        if (progreso < 1) {
+          requestAnimationFrame(pasoAnimacion);
+        } else {
+          anguloActual = destinoDeg % 360;
+          canvas.style.transform = `rotate(${anguloActual}deg)`;
+          if (typeof alTerminar === 'function') alTerminar();
+        }
+      }
+
+      requestAnimationFrame(pasoAnimacion);
+    }
+
     async function girar() {
       if (girando) return;
-      girando = true;
 
+      const yaSigo = document.getElementById('checkYaSigo').checked;
+      if (!yaSigo) {
+        alert('Marca "Ya te sigo para poder jugar" para habilitar el giro.');
+        return;
+      }
+
+      guardarBorrador();
+      const nombre = document.getElementById('nombre').value.trim();
+      const whatsapp = obtenerCelularNueveDigitos();
+
+      if (nombre.length < 2) {
+        alert('Por favor escribe tu nombre completo antes de girar.');
+        return;
+      }
+
+      if (whatsapp.length !== 9) {
+        alert('El número de celular debe tener exactamente 9 dígitos.');
+        return;
+      }
+
+      girando = true;
       const btn = document.getElementById('btnGirar');
       btn.disabled = true;
 
-      const nombre = document.getElementById('nombre').value.trim();
-      const whatsapp = document.getElementById('whatsapp').value.replace(/[^0-9]/g, '');
+      let data;
 
-      try {
-        const res = await fetch('girar.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nombre, whatsapp, red: redElegida })
-        });
-        const data = await res.json();
-
-        if (data.status === 'error') {
-          alert(data.mensaje);
-          btn.disabled = false;
-          girando = false;
-          return;
+      if (USAR_BACKEND_PHP) {
+        try {
+          const res = await fetch('girar.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre, whatsapp, red: redElegida })
+          });
+          if (!res.ok) throw new Error('Error de servidor');
+          data = await res.json();
+          if (data.status === 'error') {
+            alert(data.mensaje);
+            girando = false;
+            actualizarEstadoGiro();
+            return;
+          }
+        } catch (e) {
+          data = sortearLocal(whatsapp);
         }
-
-        if (data.status === 'ya_participo') {
-          mostrarResultado(data.premio, data.codigo, true);
-          return;
-        }
-
-        const gradosPorSector = 360 / opciones.length;
-        const centroSector = data.indice * gradosPorSector + gradosPorSector / 2;
-        const giroFinal = 360 * 6 + (360 - centroSector);
-
-        const ruleta = document.getElementById('ruleta');
-        ruleta.style.transform = `rotate(${giroFinal}deg)`;
-
-        setTimeout(() => {
-          mostrarResultado(data.premio, data.codigo, false);
-        }, 4600);
-
-      } catch (err) {
-        alert('Error de comunicación con el servidor.');
-        btn.disabled = false;
-        girando = false;
+      } else {
+        data = sortearLocal(whatsapp);
       }
+
+      if (data.status === 'ya_participo') {
+        mostrarResultado(data.premio, data.codigo, true, nombre, whatsapp);
+        girando = false;
+        return;
+      }
+
+      animarGiroSuave(data.indice, () => {
+        mostrarResultado(data.premio, data.codigo, false, nombre, whatsapp);
+        girando = false;
+      });
     }
 
-    function mostrarResultado(premio, codigo, yaParticipo) {
+    function mostrarResultado(premio, codigo, yaParticipo, nombre, whatsapp) {
       document.getElementById('btnGirar').style.display = 'none';
       document.getElementById('resultado').style.display = 'block';
 
       document.getElementById('tituloPremio').textContent = yaParticipo
-        ? `Ya participaste — Premio: ${premio}`
+        ? `Este número ya jugó — Premio: ${premio}`
         : `¡Felicidades! Ganaste: ${premio}`;
 
       document.getElementById('codigoPremio').textContent = `CÓDIGO: ${codigo}`;
 
-      const numeroNegocio = '51900000000';
-      const mensaje = encodeURIComponent(
-        `Hola, jugué en la ruleta y gané "${premio}". Mi código de cupón es ${codigo}.`
+      const numeroClienteWa = normalizarTelefonoPeru(whatsapp);
+      const mensajeCliente = encodeURIComponent(
+        `Hola ${nombre}, este es tu cupón de CHOCO_RULETA: "${premio}" — Código: ${codigo}.`
       );
-      document.getElementById('btnWhatsapp').href = `https://wa.me/${numeroNegocio}?text=${mensaje}`;
+      document.getElementById('btnWhatsappCliente').href =
+        `https://wa.me/${numeroClienteWa}?text=${mensajeCliente}`;
+
+      // Cambia este número por el WhatsApp del negocio (código de país + número, sin + ni espacios)
+      const numeroNegocio = '51900000000';
+      const mensajeNegocio = encodeURIComponent(
+        `Hola, soy ${nombre} (${whatsapp}), jugué en CHOCO_RULETA y gané "${premio}". Mi código es: ${codigo}.`
+      );
+      document.getElementById('btnWhatsappNegocio').href =
+        `https://wa.me/${numeroNegocio}?text=${mensajeNegocio}`;
     }
 
+    document.getElementById('nombre').addEventListener('input', guardarBorrador);
+    document.getElementById('whatsapp').addEventListener('input', guardarBorrador);
+
     iniciarFondoCacao();
+    restaurarBorrador();
+    dibujarRuleta();
+    actualizarEstadoGiro();
   </script>
 </body>
 </html>
-
