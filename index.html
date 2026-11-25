@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gira y Gana | Chocolatería</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --bg: #111111;
+      --card: #1b1b1b;
+      --gold: #d4af37;
+      --gold-soft: #f0d77d;
+      --text: #f5f5f5;
+      --muted: #b5b5b5;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #2a1910, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Capa de fondo con hojas y granos de cacao cayendo */
+    #cacao-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .cacao-particula {
+      position: fixed;
+      top: -60px;
+      pointer-events: none;
+      opacity: 0.78;
+      will-change: transform;
+      animation-name: caerCacao;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes caerCacao {
+      0% {
+        transform: translate3d(0, -60px, 0) rotate(0deg);
+      }
+      50% {
+        transform: translate3d(var(--deriva, 24px), 50vh, 0) rotate(180deg);
+      }
+      100% {
+        transform: translate3d(calc(var(--deriva, 24px) * -0.5), 110vh, 0) rotate(360deg);
+      }
+    }
+
+    .card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 410px;
+      background: rgba(27, 27, 27, 0.92);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      border-radius: 18px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      color: var(--gold);
+      font-size: 1.55rem;
+    }
+
+    .sub {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 14px;
+      margin: 10px 0;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+    }
+
+    .social-btn i {
+      font-size: 1.15rem;
+    }
+
+    .social-btn:hover { transform: translateY(-1px); }
+    .tiktok { background: #000; border: 1px solid #25f4ee; }
+    .instagram { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); }
+    .facebook { background: #1877f2; }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: 1px solid #3a3a3a;
+      background: #262626;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .btn-gold {
+      width: 100%;
+      padding: 13px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-soft));
+      color: #141414;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .btn-gold:disabled {
+      background: #444;
+      color: #888;
+      cursor: not-allowed;
+    }
+
+    .wheel-wrap {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      margin: 18px auto;
+    }
+
+    .pointer {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 24px solid var(--gold);
+      z-index: 5;
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.6));
+    }
+
+    canvas#ruleta {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      transition: transform 4.5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+    }
+
+    .coupon-box {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      background: #252525;
+      border: 2px dashed var(--gold);
+    }
+
+    .coupon-code {
+      display: inline-block;
+      margin: 8px 0 12px;
+      padding: 6px 12px;
+      background: #141414;
+      border-radius: 6px;
+      color: var(--gold-soft);
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .wa-btn {
+      display: block;
+      padding: 12px;
+      border-radius: 10px;
+      background: #25d366;
+      color: #0e1b12;
+      font-weight: 800;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Fondo animado de hojas y granos de cacao -->
+  <div id="cacao-bg" aria-hidden="true"></div>
+
+  <div class="card">
+    <h1>CHOCO_RULETA</h1>
+    <p class="sub">Gana descuentos y premios en tu compra</p>
+
+    <!-- Paso 1 -->
+    <div id="step1" class="step active">
+      <p><strong>Paso 1:</strong> Síguenos en una de nuestras redes para desbloquear el juego.</p>
+      <a class="social-btn tiktok" href="https://www.tiktok.com/@tu_cuenta" target="_blank" onclick="registrarClick('TikTok')">
+        <i class="bi bi-tiktok"></i>
+        <span>Seguir en TikTok</span>
+      </a>
+      <a class="social-btn instagram" href="https://www.instagram.com/tu_cuenta" target="_blank" onclick="registrarClick('Instagram')">
+        <i class="bi bi-instagram"></i>
+        <span>Seguir en Instagram</span>
+      </a>
+      <a class="social-btn facebook" href="https://www.facebook.com/tu_cuenta" target="_blank" onclick="registrarClick('Facebook')">
+        <i class="bi bi-facebook"></i>
+        <span>Seguir en Facebook</span>
+      </a>
+      <button id="btnPaso1" class="btn-gold" disabled onclick="irPaso(2)">
+        <i class="bi bi-unlock-fill"></i> Ya los sigo, continuar
+      </button>
+    </div>
+
+    <!-- Paso 2 -->
+    <div id="step2" class="step">
+      <p><strong>Paso 2:</strong> Déjanos tus datos para guardar tu cupón.</p>
+      <input type="text" id="nombre" placeholder="Tu nombre completo">
+      <input type="tel" id="whatsapp" placeholder="Tu WhatsApp (ej. 984123456)">
+      <button class="btn-gold" onclick="irPaso(3)">Continuar a la ruleta</button>
+    </div>
+
+    <!-- Paso 3 -->
+    <div id="step3" class="step">
+      <p><strong>Paso 3:</strong> ¡Toca el botón y gira!</p>
+      <div class="wheel-wrap">
+        <div class="pointer"></div>
+        <canvas id="ruleta" width="300" height="300"></canvas>
+      </div>
+      <button id="btnGirar" class="btn-gold" onclick="girar()">¡GIRAR RULETA!</button>
+
+      <div id="resultado" class="coupon-box" style="display: none;">
+        <div id="tituloPremio" style="font-size: 1.15rem; font-weight: 800; color: var(--gold);"></div>
+        <div id="codigoPremio" class="coupon-code"></div>
+        <a id="btnWhatsapp" class="wa-btn" href="#" target="_blank">
+          Enviar mi cupón por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const opciones = [
+      '10% de Descuento',
+      'Trufa / Bombon',
+      '15% de Descuento',
+      '2x1 en Barra',
+      'Envio Gratis',
+      'Pack Degustacion'
+    ];
+    const colores = ['#2a160f', '#b8860b', '#3b1f15', '#8c6200', '#2a160f', '#5c3120'];
+
+    let redElegida = '';
+    let girando = false;
+
+    // Genera hojas y granos de cacao SVG cayendo en el fondo
+    function iniciarFondoCacao() {
+      const contenedor = document.getElementById('cacao-bg');
+      const cantidad = 18; // Ajusta entre 12 y 24 según qué tan cargado quieras el fondo
+
+      const svgHoja = `
+        <svg viewBox="0 0 40 56" width="100%" height="100%">
+          <path d="M20 2 C34 12, 38 30, 20 52 C2 30, 6 12, 20 2 Z" fill="#3e6b2b"/>
+          <path d="M20 5 L20 50" stroke="#78a856" stroke-width="1.5" fill="none"/>
+          <path d="M20 18 L12 24 M20 26 L28 32 M20 34 L13 40" stroke="#78a856" stroke-width="1.1" fill="none"/>
+        </svg>
+      `;
+
+      const svgGrano = `
+        <svg viewBox="0 0 36 46" width="100%" height="100%">
+          <ellipse cx="18" cy="23" rx="13" ry="19" fill="#5a2d16"/>
+          <path d="M18 5 Q13 23 18 41" stroke="#2a1207" stroke-width="2" fill="none"/>
+        </svg>
+      `;
+
+      for (let i = 0; i < cantidad; i++) {
+        const esHoja = i % 2 === 0;
+        const el = document.createElement('div');
+        el.className = 'cacao-particula';
+        el.innerHTML = esHoja ? svgHoja : svgGrano;
+
+        const size = esHoja ? (24 + Math.random() * 14) : (18 + Math.random() * 10);
+        const left = Math.random() * 100;
+        const duration = 9 + Math.random() * 8; // 9s a 17s
+        const delay = -(Math.random() * duration); // Empiezan ya repartidos en pantalla
+        const deriva = (Math.random() > 0.5 ? 1 : -1) * (18 + Math.random() * 28) + 'px';
+
+        el.style.width = `${size}px`;
+        el.style.height = `${size * 1.25}px`;
+        el.style.left = `${left}vw`;
+        el.style.animationDuration = `${duration}s`;
+        el.style.animationDelay = `${delay}s`;
+        el.style.setProperty('--deriva', deriva);
+
+        contenedor.appendChild(el);
+      }
+    }
+
+    function registrarClick(red) {
+      redElegida = red;
+      setTimeout(() => {
+        document.getElementById('btnPaso1').disabled = false;
+      }, 1500);
+    }
+
+    function irPaso(paso) {
+      if (paso === 3) {
+        const nombre = document.getElementById('nombre').value.trim();
+        const whatsapp = document.getElementById('whatsapp').value.replace(/[^0-9]/g, '');
+        if (nombre.length < 2 || whatsapp.length < 9) {
+          alert('Por favor escribe tu nombre y un número de WhatsApp válido.');
+          return;
+        }
+      }
+
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step' + paso).classList.add('active');
+
+      if (paso === 3) {
+        dibujarRuleta();
+      }
+    }
+
+    function dibujarRuleta() {
+      const canvas = document.getElementById('ruleta');
+      const ctx = canvas.getContext('2d');
+      const total = opciones.length;
+      const anguloPorPorcion = (2 * Math.PI) / total;
+
+      ctx.clearRect(0, 0, 300, 300);
+
+      for (let i = 0; i < total; i++) {
+        const inicio = i * anguloPorPorcion - Math.PI / 2;
+        const fin = inicio + anguloPorPorcion;
+
+        ctx.beginPath();
+        ctx.moveTo(150, 150);
+        ctx.arc(150, 150, 146, inicio, fin);
+        ctx.closePath();
+        ctx.fillStyle = colores[i];
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#d4af37';
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(150, 150);
+        ctx.rotate(inicio + anguloPorPorcion / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 12px system-ui, sans-serif';
+        ctx.fillText(opciones[i], 132, 4);
+        ctx.restore();
+      }
+    }
+
+    async function girar() {
+      if (girando) return;
+      girando = true;
+
+      const btn = document.getElementById('btnGirar');
+      btn.disabled = true;
+
+      const nombre = document.getElementById('nombre').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.replace(/[^0-9]/g, '');
+
+      try {
+        const res = await fetch('girar.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, whatsapp, red: redElegida })
+        });
+        const data = await res.json();
+
+        if (data.status === 'error') {
+          alert(data.mensaje);
+          btn.disabled = false;
+          girando = false;
+          return;
+        }
+
+        if (data.status === 'ya_participo') {
+          mostrarResultado(data.premio, data.codigo, true);
+          return;
+        }
+
+        const gradosPorSector = 360 / opciones.length;
+        const centroSector = data.indice * gradosPorSector + gradosPorSector / 2;
+        const giroFinal = 360 * 6 + (360 - centroSector);
+
+        const ruleta = document.getElementById('ruleta');
+        ruleta.style.transform = `rotate(${giroFinal}deg)`;
+
+        setTimeout(() => {
+          mostrarResultado(data.premio, data.codigo, false);
+        }, 4600);
+
+      } catch (err) {
+        alert('Error de comunicación con el servidor.');
+        btn.disabled = false;
+        girando = false;
+      }
+    }
+
+    function mostrarResultado(premio, codigo, yaParticipo) {
+      document.getElementById('btnGirar').style.display = 'none';
+      document.getElementById('resultado').style.display = 'block';
+
+      document.getElementById('tituloPremio').textContent = yaParticipo
+        ? `Ya participaste — Premio: ${premio}`
+        : `¡Felicidades! Ganaste: ${premio}`;
+
+      document.getElementById('codigoPremio').textContent = `CÓDIGO: ${codigo}`;
+
+      const numeroNegocio = '51900000000';
+      const mensaje = encodeURIComponent(
+        `Hola, jugué en la ruleta y gané "${premio}". Mi código de cupón es ${codigo}.`
+      );
+      document.getElementById('btnWhatsapp').href = `https://wa.me/${numeroNegocio}?text=${mensaje}`;
+    }
+
+    iniciarFondoCacao();
+  </script>
+</body>
+</html>
+
